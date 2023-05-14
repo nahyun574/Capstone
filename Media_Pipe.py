@@ -105,11 +105,11 @@ def Shoulder_result(lx, ly, rx, ry):
 
 #가이드라인 이미지 불러오고 GraySCale, Edge 검출
 img = cv2.imread('guideline.png')
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray,50,150,apertureSize=3)
+edges = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+#edges = cv2.Canny(gray,50,150,apertureSize=3)
 
 #Egdge 반전
-edges = 255 - edges
+#edges = 255 - edges
 
 # For webcam input:
 cap = cv2.VideoCapture(0)
