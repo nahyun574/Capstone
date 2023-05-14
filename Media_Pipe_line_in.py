@@ -27,31 +27,37 @@ def Shoulder(image,results):
   #좌표 구하기
   #Lshoulder_x, Lshoulder_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].y * image_height
   #Rshoulder_x, Rshoulder_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].y * image_height
+  #Lear_x, Lear_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_EAR].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_EAR].y * image_height
+  #Rear_x, Rear_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR].y * image_height
   if(results.pose_landmarks != None):
     Lshoulder_x, Lshoulder_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].y * image_height
     Rshoulder_x, Rshoulder_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].y * image_height
+    Lear_x, Lear_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_EAR].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_EAR].y * image_height
+    Rear_x, Rear_y = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR].x * image_width, results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR].y * image_height
+  
     if(148 < Lshoulder_x < 496 and 265 < Lshoulder_y < 480 and 148 < Rshoulder_x < 496 and 265 < Rshoulder_y < 480):
-      print("left shoulder : ", Lshoulder_x, Lshoulder_y)
-      lsx_li.append(Lshoulder_x)
-      lsy_li.append(Lshoulder_y)
-      
-      print("right shoulder : ", Rshoulder_x, Rshoulder_y)
-      rsx_li.append(Rshoulder_x)
-      rsy_li.append(Rshoulder_y)
+      if(258 < Lear_x < 374 and 109 < Lear_y < 183 and 258 < Rear_x < 374 and 109 < Rear_y < 183):
+        print("left shoulder : ", Lshoulder_x, Lshoulder_y)
+        lsx_li.append(Lshoulder_x)
+        lsy_li.append(Lshoulder_y)
+        
+        print("right shoulder : ", Rshoulder_x, Rshoulder_y)
+        rsx_li.append(Rshoulder_x)
+        rsy_li.append(Rshoulder_y)
 
-      if(len(rsy_li) == 5):
-        Ls_x = sum(lsx_li) / 5
-        Ls_y = sum(lsy_li) / 5
-        Rs_x = sum(rsx_li) / 5
-        Rs_y = sum(rsy_li) / 5
-        Shoulder_result(Ls_x,Ls_y,Rs_x,Rs_y)
-        lsx_li.clear()
-        lsy_li.clear()
-        rsx_li.clear()
-        rsy_li.clear()
-        #5번 찍으면 평균 구함
-    else:
-      print("가이드라인 안에 들어와주세요")
+        if(len(rsy_li) == 5):
+          Ls_x = sum(lsx_li) / 5
+          Ls_y = sum(lsy_li) / 5
+          Rs_x = sum(rsx_li) / 5
+          Rs_y = sum(rsy_li) / 5
+          Shoulder_result(Ls_x,Ls_y,Rs_x,Rs_y)
+          lsx_li.clear()
+          lsy_li.clear()
+          rsx_li.clear()
+          rsy_li.clear()
+          #5번 찍으면 평균 구함
+      else:
+        print("가이드라인 안에 들어와주세요")
     
   else:
     print("카메라 앞에 바르게 서주세요")
