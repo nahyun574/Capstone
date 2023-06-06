@@ -100,6 +100,19 @@ def media(cam_label):
     config.enable_stream(rs.stream.color, setWidth, setHeight, rs.format.bgr8, 30)
     pipeline.start(config)
 
+    if not mp_pose:
+        print('error')
+        image = frames.get_color_frame()
+        image = cv2.bitwise_and(image, resize_edges)
+        image = cv2.flip(image,1)
+        img = Image.fromarray(image)
+        imgtk = ImageTk.PhotoImage(image=img)
+        
+        cam_label.imgtk = imgtk
+        cam_label.configure(image=imgtk)
+        cam_label.after(10,media(cam_label))
+        return
+
     with mp_pose.Pose(
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) as pose:
@@ -132,11 +145,11 @@ def media(cam_label):
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         
         #어깨 좌표 구하는 함수
-        if i == 10:
-            Shoulder(image,results)
-            print("Depth at pixel ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
-            print("Depth at pixel ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
-            i = 0
+
+        Shoulder(image,results)
+            #print("Depth at pixel ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
+            #print("Depth at pixel ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
+            
         mp_drawing.draw_landmarks(
             image,
             results.pose_landmarks,
@@ -223,7 +236,7 @@ class Shoulder_Page(tkinter.Frame):
         tkinter.Label(self,text="어깨측정").pack(side="top")#,fill="x",pady=5)
         
         cam_frame_shoulder = tkinter.Frame(self, bg="white", width=640, height=480)
-        cam_frame_shoulder.pack(size="top")
+        cam_frame_shoulder.pack(side="top")
         cam_label = tkinter.Label(cam_frame_shoulder)
         cam_label.grid()
         
