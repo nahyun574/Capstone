@@ -17,6 +17,8 @@ lsx_li = []
 lsy_li = []
 rsx_li = []
 rsy_li = []
+setWidth = 640
+setHeight = 480
 
 #가이드라인 이미지 불러오고 GraySCale, Edge 검출
 img = cv2.imread('GuideLine_v5.0.3.png')
@@ -81,38 +83,12 @@ def Shoulder_result(lx, ly, rx, ry):
     elif incline == 2 : print('왼쪽어깨')
     else: print("오른쪽 어깨")
 
-def media(cam_label):
+def media(pipeline, cam_label):
+    
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_pose = mp.solutions.pose
-
-    # For webcam input:
-    #fps = cap.get(cv2.CAP_PROP_FPS) #웹 캠에서 fps값 획득
-    # Configure depth and color streams
-    pipeline = rs.pipeline()
-    config = rs.config()
-    setWidth = 640
-    setHeight = 480
-
-
     
-    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-    config.enable_stream(rs.stream.color, setWidth, setHeight, rs.format.bgr8, 30)
-    pipeline.start(config)
-
-    if not mp_pose:
-        print('error')
-        image = frames.get_color_frame()
-        image = cv2.bitwise_and(image, resize_edges)
-        image = cv2.flip(image,1)
-        img = Image.fromarray(image)
-        imgtk = ImageTk.PhotoImage(image=img)
-        
-        cam_label.imgtk = imgtk
-        cam_label.configure(image=imgtk)
-        cam_label.after(10,media(cam_label))
-        return
-
     with mp_pose.Pose(
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) as pose:
@@ -162,7 +138,7 @@ def media(cam_label):
         
         cam_label.imgtk = imgtk
         cam_label.configure(image=imgtk)
-        cam_label.after(10,media(cam_label))
+        cam_label.after(10,media(pipeline,cam_label))
 
 class Program(tkinter.Tk):
     def __init__(self):
@@ -240,7 +216,14 @@ class Shoulder_Page(tkinter.Frame):
         cam_label = tkinter.Label(cam_frame_shoulder)
         cam_label.grid()
         
-        media(cam_label)
+        pipeline = rs.pipeline()
+        config = rs.config()
+
+        config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+        config.enable_stream(rs.stream.color, setWidth, setHeight, rs.format.bgr8, 30)
+        pipeline.start(config)
+
+        media(pipeline, cam_label)
 
         button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: master.switch_frame(Main_Page)).pack(side="bottom")
         
