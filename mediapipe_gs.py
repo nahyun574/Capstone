@@ -103,63 +103,53 @@ def media(cam_label):
     with mp_pose.Pose(
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) as pose:
-        i = 0
+        frames = pipeline.wait_for_frames()
+        image = frames.get_color_frame()
+        depth = frames.get_depth_frame()
         
-        while cv2.waitKey(1) < 0:
-            i+=1
-            frames = pipeline.wait_for_frames()
-            image = frames.get_color_frame()
-            depth = frames.get_depth_frame()
-            
-            if not depth:
-                continue
-            if not image:
-                continue
-            
-            if 0 <= int(Lshoulder_x) < setWidth and 0 <= int(Lshoulder_y) < setHeight:
-                Ls_dist = depth.get_distance(int(Lshoulder_x), int(Lshoulder_y))
-                Rs_dist = depth.get_distance(int(Rshoulder_x), int(Rshoulder_y))# 특정 픽셀에서의 깊이 값을 가져옴
-                   
-            resize_edges = np.repeat(edges[:,:,np.newaxis],3,-1)
-            image = np.asanyarray(image.get_data())
-            image_height, image_width, _ = image.shape
-            
-            # 엣지 추가
-            image = cv2.bitwise_and(image, resize_edges)
-            
-            image.flags.writeable = False
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            results = pose.process(image)
-
-            # Draw the pose annotation on the image.
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            
-            #어깨 좌표 구하는 함수
-            if i == 10:
-                Shoulder(image,results)
-                print("Depth at pixel ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
-                print("Depth at pixel ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
-                i = 0
-            mp_drawing.draw_landmarks(
-                image,
-                results.pose_landmarks,
-                mp_pose.POSE_CONNECTIONS,
-                landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+        if not depth:
+            return
+        if not image:
+            return
+        
+        if 0 <= int(Lshoulder_x) < setWidth and 0 <= int(Lshoulder_y) < setHeight:
+            Ls_dist = depth.get_distance(int(Lshoulder_x), int(Lshoulder_y))
+            Rs_dist = depth.get_distance(int(Rshoulder_x), int(Rshoulder_y))# 특정 픽셀에서의 깊이 값을 가져옴
                 
-                
-            # Flip the image horizontally for a selfie-view display.
-            #cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
+        resize_edges = np.repeat(edges[:,:,np.newaxis],3,-1)
+        image = np.asanyarray(image.get_data())
+        image_height, image_width, _ = image.shape
+        
+        # 엣지 추가
+        image = cv2.bitwise_and(image, resize_edges)
+        
+        image.flags.writeable = False
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        results = pose.process(image)
 
-            #show_fps.ShowFPS(image,last_time,time_per_frame_video)
-            #if cv2.waitKey(5) & 0xFF == 27:
-                #break
-            image = cv2.flip(image,1)
-            imgtk = ImageTk.PhotoImage(image=image)
-            
-            cam_label.imgtk = imgtk
-            cam_label.configure(image=imgtk)
-            cam_label.after(10,video_play)
+        # Draw the pose annotation on the image.
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        
+        #어깨 좌표 구하는 함수
+        if i == 10:
+            Shoulder(image,results)
+            print("Depth at pixel ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
+            print("Depth at pixel ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
+            i = 0
+        mp_drawing.draw_landmarks(
+            image,
+            results.pose_landmarks,
+            mp_pose.POSE_CONNECTIONS,
+            landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+        
+        image = cv2.flip(image,1)
+        img = Image.fromarray(image)
+        imgtk = ImageTk.PhotoImage(image=img)
+        
+        cam_label.imgtk = imgtk
+        cam_label.configure(image=imgtk)
+        cam_label.after(10,media(cam_label))
 
 class Program(tkinter.Tk):
     def __init__(self):
@@ -237,7 +227,7 @@ class Shoulder_Page(tkinter.Frame):
         cam_label = tkinter.Label(cam_frame_shoulder)
         cam_label.grid()
         
-        media()
+        media(cam_label)
 
         button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: master.switch_frame(Main_Page)).pack(side="bottom")
         
