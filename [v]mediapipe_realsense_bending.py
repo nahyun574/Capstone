@@ -117,7 +117,7 @@ def media():
             i+=1
             frames = pipeline.wait_for_frames()
             aligned_frames =  align.process(frames)
-            image = aligned_frames.get_color_frame()
+            image = frames.get_color_frame()
             depth = aligned_frames.get_depth_frame()
             
             if not depth or not image:
