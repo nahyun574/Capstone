@@ -152,7 +152,7 @@ def media():
                 else:
                     print("Depth at ls ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
                     print("Depth at rs ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
-                Middle_dist = Ls_dist + Rs_dist / 2
+                Middle_dist = (Ls_dist + Rs_dist) / 2
                 
                 if(abs(No_dist - Middle_dist) > 0.2):
                       print("허리를 꼿꼿하게 펴주세요")
