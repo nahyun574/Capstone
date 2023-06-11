@@ -120,7 +120,7 @@ def media():
             image = aligned_frames.get_color_frame()
             depth = aligned_frames.get_depth_frame()
             
-            if not depth or image:
+            if not depth or not image:
                 continue
             
             
