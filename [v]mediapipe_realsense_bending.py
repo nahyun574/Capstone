@@ -104,6 +104,9 @@ def media():
     config.enable_stream(rs.stream.depth, setWidth, setHeight, rs.format.z16, 30)
     config.enable_stream(rs.stream.color, setWidth, setHeight, rs.format.bgr8, 30)
     pipeline.start(config)
+    
+    align_to = rs.stream.depth
+    align = rs.align(align_to)
 
     with mp_pose.Pose(
         min_detection_confidence=0.5,
@@ -113,13 +116,13 @@ def media():
         while cv2.waitKey(1) < 0:
             i+=1
             frames = pipeline.wait_for_frames()
-            image = frames.get_color_frame()
-            depth = frames.get_depth_frame()
+            aligned_frames =  align.process(frames)
+            image = aligned_frames.get_color_frame()
+            depth = aligned_frames.get_depth_frame()
             
-            if not depth:
+            if not depth or image:
                 continue
-            if not image:
-                continue
+            
             
             if 0 <= int(Lshoulder_x) < setWidth and 0 <= int(Lshoulder_y) < setHeight:
                 if 0 <= int(Rshoulder_x) < setWidth and 0 <= int(Rshoulder_y) < setHeight:
@@ -144,14 +147,14 @@ def media():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             
             def dist(Ls_dist, Rs_dist, No_dist):
-                if(abs(Ls_dist - Rs_dist) > 0.5):
+                if(abs(Ls_dist - Rs_dist) > 100):
                     print("어깨 삐뚤어짐")
                 else:
                     print("Depth at ls ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
                     print("Depth at rs ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
                 Middle_dist = Ls_dist + Rs_dist / 2
                 
-                if(abs(No_dist - Middle_dist) > 1):
+                if(abs(No_dist - Middle_dist) > 100):
                       print("허리를 꼿꼿하게 펴주세요")
                 else:
                     print("Depth at no ({}, {}): {} meters".format(Nose_x, Nose_y, No_dist))
