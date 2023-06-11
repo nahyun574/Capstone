@@ -147,14 +147,14 @@ def media():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             
             def dist(Ls_dist, Rs_dist, No_dist):
-                if(abs(Ls_dist - Rs_dist) > 100):
+                if(abs(Ls_dist - Rs_dist) > 0.1):
                     print("어깨 삐뚤어짐")
                 else:
                     print("Depth at ls ({}, {}): {} meters".format(Lshoulder_x, Lshoulder_y, Ls_dist))
                     print("Depth at rs ({}, {}): {} meters".format(Rshoulder_x, Rshoulder_y, Rs_dist))
                 Middle_dist = Ls_dist + Rs_dist / 2
                 
-                if(abs(No_dist - Middle_dist) > 100):
+                if(abs(No_dist - Middle_dist) > 0.2):
                       print("허리를 꼿꼿하게 펴주세요")
                 else:
                     print("Depth at no ({}, {}): {} meters".format(Nose_x, Nose_y, No_dist))
