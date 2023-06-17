@@ -50,10 +50,13 @@ FONT = ImageFont.truetype(FONTPATH,20)
 class Str:
     guide:str = " "
 
+class Int:
+    guide:int = 0
+    
 class Pos:
-    x: float = None
-    y: float = None
-    z: float = None
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.0
 
 L_SHOULDER = Pos()
 R_SHOULDER = Pos()
@@ -65,7 +68,13 @@ R_CHIN = Pos()
 L_FORHEAD = Pos()
 R_FORHEAD = Pos()
 
+SUM_LS = Pos()
+SUM_RS = Pos()
+
 STR = Str()
+R_TEXT = Str()
+R_TY_TEXT = Str()
+
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
