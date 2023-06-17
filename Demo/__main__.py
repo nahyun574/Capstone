@@ -1,5 +1,6 @@
 from Library import *
 from media import *
+from result import *
 
 
 class Program(tkinter.Tk):
@@ -33,9 +34,9 @@ class Main_Page(tkinter.Frame):
         tkinter.Frame.__init__(self,master)
 
         tkinter.Label(self, text="신체 불균형 측정 프로그램").pack(side="top",fill="x",pady=5)
-        button_face = tkinter.Button(self, text="얼굴 불균형 측정",command=lambda: master.switch_frame(Face_Page)).pack()
-        button_shoulder = tkinter.Button(self,text ="어깨 불균형 측정",command=lambda: (master.switch_frame(Shoulder_Page))).pack()
-
+        button_face = tkinter.Button(self, text="얼굴 불균형 측정", command=lambda: master.switch_frame(Face_Page)).pack()
+        button_shoulder = tkinter.Button(self, text ="어깨 불균형 측정", command=lambda: (master.switch_frame(Shoulder_Page))).pack()
+        button_shoulder_result = tkinter.Button(self, text="결과보기",command=lambda: (master.switch_frame(Shoulder_result))).pack(side="bottom")
         #button_close = tkinter.Button(self,text="종료하기", command=quit()).pack()
 
 # 얼굴 불균형 측정 화면
@@ -64,7 +65,26 @@ class Shoulder_Page(tkinter.Frame):
         cv2.destroyAllWindows()
         PIPELINE.stop()
         
+        button_shoulder_result = tkinter.Button(self, text="결과보기",command=lambda: (master.switch_frame(Shoulder_result))).pack(side="bottom")
         button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: (master.switch_frame(Main_Page))).pack(side="bottom")
+
+#어깨 결과보기 화면
+class Shoulder_result(tkinter.Frame):
+    def __init__(self,master):
+        tkinter.Frame.__init__(self,master)
+        tkinter.Label(self,text="어깨결과").pack(side="top") #,fill="x",pady=5)
+        
+        Video_result()
+        
+        label_text_R_TEXT = f"어깨비대칭: {R_TEXT.guide}"  # 텍스트 문자열 생성
+        label_text_R_TY = f"어깨척도: {R_TY_TEXT.guide}"
+        label = tkinter.Label(self, text=label_text_R_TEXT)  # 라벨 생성 및 텍스트 설정
+        label.pack()
+        label_ty = tkinter.Label(self, text=label_text_R_TY)
+        label_ty.pack()
+        
+        button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: (master.switch_frame(Main_Page))).pack(side="bottom")
+
 
 if __name__ == "__main__":
     app = Program()
