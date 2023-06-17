@@ -1,6 +1,5 @@
 from Library import *
 from guideline import *
-#from save_media import *
 
 def GuideText(frame):
     #텍스트 위치 계산
@@ -11,6 +10,9 @@ def GuideText(frame):
 
     frame = np.array(frame)
     return frame
+
+
+##############어깨##############
 
 def video(cam_label):
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
@@ -49,47 +51,7 @@ def video(cam_label):
             time.sleep(0.1)
             video(cam_label)
 
-def face_video(cam_label):
-        with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-            face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-        
-            time.sleep(1)
-            frames = PIPELINE.wait_for_frames()
-
-            frame = frames.get_color_frame()
-
-            frame = cv2.cvtColor(np.asanyarray(frame.get_data()), cv2.COLOR_BGR2RGB)
-
-            HO_landmark = holistic.process(frame) 
-            FC_landmark = face_mesh.process(frame) 
-
-            #*미디어 파이프 그리기
-            mp_drawing.draw_landmarks(
-                frame,
-                HO_landmark.face_landmarks,
-                mp_holistic.FACEMESH_TESSELATION,
-                landmark_drawing_spec=None,
-                connection_drawing_spec=mp_drawing_styles
-                .get_default_face_mesh_tesselation_style()
-            )
-            
-            #가이드 라인 추가 및 텍스트 설정
-            #frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-            frame = cv2.flip(frame,1)
-            frame = cv2.bitwise_and(frame,GUIDELINE)
-            frame = GuideText(frame)
-            
-            #화면 표시
-            img = Image.fromarray(frame) # Image 객체로 변환
-            imgtk = ImageTk.PhotoImage(image=img) # ImageTk 객체로 변환
-            # OpenCV 동영상
-        
-            cam_label.imgtk = imgtk
-            cam_label.configure(image=imgtk)
-            time.sleep(0.1)
-            face_video(cam_label)
-
-
+#어깨 가이드라인 겹치기
 def Media_Shoulder():
     count = 0
     saveon = False
@@ -124,7 +86,6 @@ def Media_Shoulder():
                 mp_pose.POSE_CONNECTIONS,
                 landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
             )
-
         
             #가이드 라인 추가 및 텍스트 설정
             frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
@@ -146,7 +107,50 @@ def Media_Shoulder():
             if saveon:
                 #저장완료
                 break
+
+###############얼굴###############
+
+def face_video(cam_label):
+        with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+            face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
         
+            time.sleep(1)
+            frames = PIPELINE.wait_for_frames()
+
+            frame = frames.get_color_frame()
+
+            frame = cv2.cvtColor(np.asanyarray(frame.get_data()), cv2.COLOR_BGR2RGB)
+
+            HO_landmark = holistic.process(frame) 
+            FC_landmark = face_mesh.process(frame) 
+
+            #*미디어 파이프 그리기
+            mp_drawing.draw_landmarks(
+                frame,
+                HO_landmark.face_landmarks,
+                mp_holistic.FACEMESH_TESSELATION,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=mp_drawing_styles
+                .get_default_face_mesh_tesselation_style()
+            )
+            
+            #가이드 라인 추가 및 텍스트 설정
+            #frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+            frame = cv2.flip(frame,1)
+            frame = cv2.bitwise_and(frame,FACE_GUIDELINE)
+            frame = GuideText(frame)
+            
+            #화면 표시
+            img = Image.fromarray(frame) # Image 객체로 변환
+            imgtk = ImageTk.PhotoImage(image=img) # ImageTk 객체로 변환
+            # OpenCV 동영상
+        
+            cam_label.imgtk = imgtk
+            cam_label.configure(image=imgtk)
+            time.sleep(0.1)
+            face_video(cam_label)
+
+#얼굴 가이드라인 겹치기      
 def Media_Face():
     count = 0
     saveon = False
@@ -186,7 +190,6 @@ def Media_Face():
             .get_default_face_mesh_tesselation_style()
             )
 
-        
             #가이드 라인 추가 및 텍스트 설정
             frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             frame = cv2.flip(frame,1)
@@ -211,12 +214,10 @@ def Media_Face():
         
 ############## SAVE MEDIA #################
 
-VIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, (WIDTH, HEIGHT), isColor = True)
-VIDEO_DEPTH_WRITER = cv2.VideoWriter('C:/lab/Demo/image/depth_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, (WIDTH, HEIGHT), isColor = True)
-
-FACEVIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/face_color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, (WIDTH, HEIGHT), isColor = True)
-
+#어깨 영상 저장
 def save():
+    VIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
+    VIDEO_DEPTH_WRITER = cv2.VideoWriter('C:/lab/Demo/image/depth_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
     #* 촬영 시작
     STR.guide = '촬영을 시작합니다 3'
     
@@ -266,7 +267,7 @@ def save():
                 STR.guide = "촬영중입니다. 움직이지마세요."
                 VIDEO_COLOR_WRITER.write(cv2.flip(color_image,1))
                 VIDEO_DEPTH_WRITER.write(cv2.flip(depth_iamge,1))
-            if etime > 7:
+            if etime > 8:
                 break
 
         # 동영상 저장 종료
@@ -277,7 +278,9 @@ def save():
         
     return True
 
+#얼굴 영상 저장
 def face_save():
+    FACEVIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/face_color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
     #* 촬영 시작
     STR.guide = '촬영을 시작합니다 3'
     
@@ -289,7 +292,7 @@ def face_save():
 
             frames = PIPELINE.wait_for_frames()
             depth_frames = ALIGN.process(frames)
-            color_frame = frames.get_color_frame()
+            color_frame = frames.get_color_frame()  
             depth_frame = depth_frames.get_depth_frame()
             
             if not color_frame: continue
@@ -328,7 +331,7 @@ def face_save():
                 STR.guide = "촬영중입니다. 움직이지마세요."
                 FACEVIDEO_COLOR_WRITER.write(cv2.flip(color_image,1))
                 #VIDEO_DEPTH_WRITER.write(cv2.flip(depth_iamge,1))
-            if etime > 7:
+            if etime > 8:
                 break
 
         # 동영상 저장 종료
