@@ -70,7 +70,10 @@ def Media_Shoulder():
             frame = cv2.cvtColor(np.asanyarray(frame.get_data()), cv2.COLOR_BGR2RGB)
 
             MP_landmark = pose.process(frame)
-
+            L_SHOULDER.z = depth.get_distance(int(L_SHOULDER.x), int(L_SHOULDER.y))
+            R_SHOULDER.z = depth.get_distance(int(R_SHOULDER.x), int(R_SHOULDER.y))
+            MIDDLE_LR_S.z = (L_SHOULDER.z + R_SHOULDER.z) / 2
+            
             # #가이드라인 확인 5초마다
             if time.time() - Start_Time > N_SECONDS:
                 count += 1
@@ -86,7 +89,7 @@ def Media_Shoulder():
                 mp_pose.POSE_CONNECTIONS,
                 landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
             )
-        
+            
             #가이드 라인 추가 및 텍스트 설정
             frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             frame = cv2.flip(frame,1)
@@ -171,7 +174,11 @@ def Media_Face():
 
             HO_landmark = holistic.process(frame) 
             FC_landmark = face_mesh.process(frame) 
-        
+
+            CHIN.z = depth.get_distance(int(CHIN.x), int(CHIN.y))
+            FORHEAD.z = depth.get_distance(int(FORHEAD.x), int(FORHEAD.y))
+            MIDDLE_LR_F.z = (CHIN.x + FORHEAD.z) / 2
+            
             # #가이드라인 확인 5초마다
             if time.time() - Start_Time > N_SECONDS:
                 count += 1
@@ -179,21 +186,13 @@ def Media_Face():
 
                 if INFace(depth, FC_landmark):
                     saveon = face_save()
-            
-            #*미디어 파이프 그리기
-            mp_drawing.draw_landmarks(
-            frame,
-            HO_landmark.face_landmarks,
-            mp_holistic.FACEMESH_TESSELATION,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles
-            .get_default_face_mesh_tesselation_style()
-            )
 
             #가이드 라인 추가 및 텍스트 설정
+            frame = cv2.circle(frame,(317,146),5,(255,255,0),-1)
             frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             frame = cv2.flip(frame,1)
             frame = cv2.bitwise_and(frame,FACE_GUIDELINE)
+            frame = cv2.circle(frame, (int(GLABELLA.x),int(GLABELLA.y)),5,(255,0,0),-1)
             frame = GuideText(frame)
             
             #화면 표시
@@ -217,7 +216,7 @@ def Media_Face():
 #어깨 영상 저장
 def save():
     VIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
-    VIDEO_DEPTH_WRITER = cv2.VideoWriter('C:/lab/Demo/image/depth_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
+    #VIDEO_DEPTH_WRITER = cv2.VideoWriter('C:/lab/Demo/image/depth_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
     #* 촬영 시작
     STR.guide = '촬영을 시작합니다 3'
     
@@ -266,13 +265,11 @@ def save():
             elif etime > 3:
                 STR.guide = "촬영중입니다. 움직이지마세요."
                 VIDEO_COLOR_WRITER.write(cv2.flip(color_image,1))
-                VIDEO_DEPTH_WRITER.write(cv2.flip(depth_iamge,1))
             if etime > 8:
                 break
 
         # 동영상 저장 종료
         VIDEO_COLOR_WRITER.release()
-        VIDEO_DEPTH_WRITER.release()
 
         print('동영상 저장 완료')
         
@@ -280,7 +277,7 @@ def save():
 
 #얼굴 영상 저장
 def face_save():
-    FACEVIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/face_color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
+    FACEVIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/face_color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 25, (WIDTH, HEIGHT), isColor = True)
     #* 촬영 시작
     STR.guide = '촬영을 시작합니다 3'
     
@@ -330,13 +327,11 @@ def face_save():
             elif etime > 3:
                 STR.guide = "촬영중입니다. 움직이지마세요."
                 FACEVIDEO_COLOR_WRITER.write(cv2.flip(color_image,1))
-                #VIDEO_DEPTH_WRITER.write(cv2.flip(depth_iamge,1))
             if etime > 8:
                 break
 
         # 동영상 저장 종료
         FACEVIDEO_COLOR_WRITER.release()
-        #VIDEO_DEPTH_WRITER.release()
 
         print('동영상 저장 완료')
         
