@@ -70,6 +70,10 @@ def INFace_shoulder(Depth,Landmarks):
         #어깨 좌표가 이미지 안에 들어와있는지 확인 및 좌표 가져오기
         L_SHOULDER.x, L_SHOULDER.y = Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].x * WIDTH, Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER].y * HEIGHT
         R_SHOULDER.x, R_SHOULDER.y = Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].x * WIDTH, Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER].y * HEIGHT
+
+        MIDDLE.x = (L_SHOULDER.x - R_SHOULDER.x)/2 + R_SHOULDER.x
+        MIDDLE.y = (L_SHOULDER.y - R_SHOULDER.y)/2 + R_SHOULDER.y
+    
     except:
         #카메라 안에 들어와주세요
         STR.guide = '카메라안으로 들어와주세요'
@@ -80,20 +84,61 @@ def INFace_shoulder(Depth,Landmarks):
 def INFace(Depth,Landmarks):
     try :
         face_landmarks = Landmarks.multi_face_landmarks[0] 
+
+        ## 턱 끝 중앙 ##
         chin_landmark = face_landmarks.landmark[152]
-        chin_x = int(chin_landmark.x * 640)
-        chin_y = int(chin_landmark.y * 480)
-            
+        CHIN.x = int(chin_landmark.x * WIDTH)
+        CHIN.y = int(chin_landmark.y * HEIGHT)
+        ## 이마 끝 ##
         forhead_landmark = face_landmarks.landmark[10]
-        forhead_x = int(forhead_landmark.x * 640)
-        forhead_y = int(forhead_landmark.y * 480)
-    
-        if(280 < chin_x < 340 and  400 < chin_y < 420 and 300 < forhead_x < 400 and 53 < forhead_y < 133):
-            print(f"chin 좌표: ({chin_x}, {chin_y})")
-            print(f"forhead 좌표: ({forhead_x}, {forhead_y})")
-            #측정 시작부분
-            return True
+        FORHEAD.x = int(forhead_landmark.x * WIDTH)
+        FORHEAD.y = int(forhead_landmark.y * HEIGHT)
         
+        ## 왼쪽눈 눈꼬리 ##
+        Leye_end_landmark = face_landmarks.landmark[263]
+        LEYE_END.x = int(Leye_end_landmark.x * WIDTH)
+        LEYE_END.y = int(Leye_end_landmark.y * HEIGHT)
+        ## 왼쪽눈 눈앞머리 ##
+        Leye_front_landmark = face_landmarks.landmark[362]
+        LEYE_FRONT.x = int(Leye_front_landmark.x * WIDTH)
+        LEYE_FRONT.y = int(Leye_front_landmark.y * HEIGHT)
+        ## 오른쪽눈 눈꼬리 ##
+        Reye_end_landmark = face_landmarks.landmark[33]
+        REYE_END.x = int(Reye_end_landmark.x * WIDTH)
+        REYE_END.y = int(Reye_end_landmark.y * HEIGHT)
+        ## 오른쪽눈 눈앞머리 ##
+        Reye_front_landmark = face_landmarks.landmark[133]
+        REYE_FRONT.x = int(Reye_front_landmark.x * WIDTH)
+        REYE_FRONT.y = int(Reye_front_landmark.y * HEIGHT)
+        
+        ## 왼쪽 입꼬리 ##
+        Llip_landmark = face_landmarks.landmark[308]
+        LLIP.x = (Llip_landmark.x * WIDTH)
+        LLIP.y = (Llip_landmark.y * HEIGHT)
+        ## 오른쪽 입꼬리 ##
+        Rlip_landmark = face_landmarks.landmark[78]
+        RLIP.x = (Rlip_landmark.x * WIDTH)
+        RLIP.y = (Rlip_landmark.y * HEIGHT)
+        ## 윗입술 중앙 ##
+        upper_lip_landmark = face_landmarks.landmark[0]
+        UPPERLIP.x = (upper_lip_landmark.x * WIDTH)
+        UPPERLIP.y = (upper_lip_landmark.y * HEIGHT)
+        
+        ## 코끝 ##
+        nose_tip_landmark = face_landmarks.landmark[1]
+        NOSE_TIP.x = (nose_tip_landmark.x * WIDTH)
+        NOSE_TIP.y = (nose_tip_landmark.y * HEIGHT)
+        ## 미간 ##
+        glabella_landmark = face_landmarks.landmark[168]
+        GLABELLA.x = (glabella_landmark.x * WIDTH)
+        GLABELLA.y = (glabella_landmark.y * HEIGHT)
+        
+        if(280 < CHIN.x < 340 and  250 < CHIN.y < 310 and 300 < FORHEAD.x < 400 and 53 < FORHEAD.y < 133):
+            if(310 < GLABELLA.x < 325 and 139 < GLABELLA.y < 153):
+                #측정 시작부분
+                return True
+            else:            
+                STR.guide = "미간 점에 맞춰주세요"
         else:
             #가이드라인 안에 들어와주세요
             STR.guide = "가이드라인 안에 들어와주세요"
@@ -104,4 +149,3 @@ def INFace(Depth,Landmarks):
         STR.guide = '카메라안으로 들어와주세요'
     
     return False
-    
