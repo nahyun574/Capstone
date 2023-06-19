@@ -11,16 +11,16 @@ def Shoulder_incline(lx, ly, rx, ry):
     # -1 : 오류
     # 2 : 왼쪽이 높음
     # 3 : 오른쪽이 높음
-    if 0 <= (y_dis) <= 1: 
+    if 0 <= (y_dis) <= 10: 
         R_TEXT.guide = '균형'
     elif lx - rx == 0:
         R_TEXT.guide = '인식불가'
     else:
         if (ry-ly) / (rx-lx) > 0:
-            if abs(y_dis) > 2:
+            if abs(y_dis) > 20:
                 R_TEXT.guide = '왼쪽어깨'
                 R_TY_TEXT.guide = '고도 비대칭'
-            elif abs(y_dis) > 1.5:
+            elif abs(y_dis) > 15:
                 R_TEXT.guide = '왼쪽어깨'
                 R_TY_TEXT.guide = '중도 비대칭'
             else:
@@ -28,10 +28,10 @@ def Shoulder_incline(lx, ly, rx, ry):
                 R_TY_TEXT.guide = '경도 비대칭'
             
         else:
-            if abs(y_dis) > 2:
+            if abs(y_dis) > 20:
                 R_TEXT.guide = '오른쪽어깨'
                 R_TY_TEXT.guide = '고도 비대칭' 
-            elif abs(y_dis) > 1.5:
+            elif abs(y_dis) > 15:
                 R_TEXT.guide = '오른쪽어깨'
                 R_TY_TEXT.guide = '중도 비대칭' 
             else:
