@@ -5,11 +5,13 @@ import tkinter
 from PIL import Image, ImageTk
 from PIL import ImageFont, ImageDraw, Image
 import numpy as np
+import math
 import time
 import mediapipe as mp
 import pyrealsense2 as rs
 from dataclasses import dataclass
 from pathlib import Path
+from multiprocessing import Process
 import threading
 
 # 생성한 라이브러리
@@ -25,6 +27,7 @@ WIDTH = 640
 HEIGHT = 480
 COUNTOUT = 60
 N_SECONDS = 2
+PI = math.pi
 
 #카메라 설정 부분
 PIPELINE = rs.pipeline()
@@ -63,18 +66,41 @@ R_SHOULDER = Pos()
 L_EAR = Pos()
 R_EAR = Pos()
 NOSE = Pos()
-L_CHIN = Pos()
-R_CHIN = Pos()
-L_FORHEAD = Pos()
-R_FORHEAD = Pos()
+
+CHIN = Pos()
+FORHEAD = Pos()
+LEYE_END = Pos()
+LEYE_FRONT = Pos()
+REYE_END = Pos()
+REYE_FRONT = Pos()
+LLIP = Pos()
+RLIP = Pos()
+UPPERLIP = Pos()
+NOSE_TIP = Pos()
+GLABELLA = Pos()
+MIDDLE = Pos()
 
 SUM_LS = Pos()
 SUM_RS = Pos()
 
+EYE_LIP_DEG = Int()
+EYE_DEG = Int()
+LIP_DEG = Int()
+FACE_DEG = Int()
+
+CHIN_DIS = Int()
+    
 STR = Str()
 R_TEXT = Str()
 R_TY_TEXT = Str()
+F_TEXT = Str()
+FA_TEXT = Str()
+FC_LR_TEXT = Str()
+FC_CENTER_TEXT = Str()
 
+DISTANCE = Int()
+MIDDLE_LR_S = Pos()
+MIDDLE_LR_F = Pos()
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
