@@ -36,7 +36,8 @@ class Main_Page(tkinter.Frame):
         tkinter.Label(self, text="신체 불균형 측정 프로그램").pack(side="top",fill="x",pady=5)
         button_face = tkinter.Button(self, text="얼굴 불균형 측정", command=lambda: master.switch_frame(Face_Page)).pack()
         button_shoulder = tkinter.Button(self, text ="어깨 불균형 측정", command=lambda: (master.switch_frame(Shoulder_Page))).pack()
-        button_shoulder_result = tkinter.Button(self, text="결과보기",command=lambda: (master.switch_frame(Shoulder_result))).pack(side="bottom")
+        button_face_result = tkinter.Button(self, text="얼굴결과보기",command=lambda: (master.switch_frame(Face_result))).pack()
+        button_shoulder_result = tkinter.Button(self, text="어깨결과보기",command=lambda: (master.switch_frame(Shoulder_result))).pack(side="bottom")
         #button_close = tkinter.Button(self,text="종료하기", command=quit()).pack()
 
 # 얼굴 불균형 측정 화면
@@ -51,8 +52,31 @@ class Face_Page(tkinter.Frame):
         cv2.destroyAllWindows()
         PIPELINE.stop()
         
+        button_face_result = tkinter.Button(self, text="결과보기",command=lambda: (master.switch_frame(Face_result))).pack(side="bottom")
         button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: (master.switch_frame(Main_Page))).pack(side="bottom")
 
+#얼굴 결과보기 화면
+class Face_result(tkinter.Frame):
+    def __init__(self,master):
+        tkinter.Frame.__init__(self,master)
+        tkinter.Label(self,text="얼굴결과").pack(side="top") #,fill="x",pady=5)
+        
+        Face_Video_result()
+        
+        label_text_F_TEXT = f"얼굴비대칭: {F_TEXT.guide}"  # 텍스트 문자열 생성
+        label_text_FA_TEXT = f"눈과 입의 각도: {FA_TEXT.guide}"
+        label_text_FC_LR_TEXT = f"좌우 안면비대칭: {FC_LR_TEXT.guide}"
+        label_text_FC_CENTER_TEXT = f"중앙 안면비대칭: {FC_CENTER_TEXT.guide}"
+        label = tkinter.Label(self, text=label_text_F_TEXT)  # 라벨 생성 및 텍스트 설정
+        label.pack()
+        label_ty = tkinter.Label(self, text=label_text_FA_TEXT)
+        label_ty.pack()
+        label_ty = tkinter.Label(self, text=label_text_FC_LR_TEXT)
+        label_ty.pack()
+        label_ty = tkinter.Label(self, text=label_text_FC_CENTER_TEXT)
+        label_ty.pack()
+        
+        button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: (master.switch_frame(Main_Page))).pack(side="bottom")
         
 # 어깨 불균형 측정 화면
 class Shoulder_Page(tkinter.Frame):
