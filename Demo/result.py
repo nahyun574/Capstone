@@ -5,8 +5,8 @@ from Library import *
 
 def Shoulder_incline(lx, ly, rx, ry):
     #깊이
-    y_dis = 87 / (1/60) * MIDDLE_LR_S.z  * (ry-ly)
-
+    y_dis = (870 / ((1/6) * MIDDLE_LR_S.z*1000))  * (ry-ly)
+    
     # 0 : 평행
     # -1 : 오류
     # 2 : 왼쪽이 높음
@@ -171,10 +171,10 @@ def Face_angle(glx,gly,ulx,uly):
 #코끝, 턱끝, 미간이 수직선과 얼마나 떨어져있는지 측정
 def Nose_chin_glabelly():
     
-    chin_area = abs((MIDDLE.x - CHIN.x) * (0 - CHIN.y) - (MIDDLE.y - CHIN.y) * (MIDDLE.x - CHIN.x))
-    line = ((MIDDLE.x - MIDDLE.y) **2 + (MIDDLE.y - 0) **2) **0.5
-    CHIN_DIS.guide += chin_area/line
-
+    """chin_area = abs((MIDDLE.x - CHIN.x) * (0 - CHIN.y) - (MIDDLE.y - CHIN.y) * (MIDDLE.x - CHIN.x))
+    line = ((MIDDLE.x - MIDDLE.x) **2 + (MIDDLE.y - 0) **2) **0.5
+    CHIN_DIS.guide += chin_area/line"""
+    CHIN_DIS.guide += (abs(MIDDLE.x - CHIN.x))
 def Sum_Face(i):
     
     EYE_LIP_DEG.guide = EYE_LIP_DEG.guide / (i-1)
@@ -182,7 +182,7 @@ def Sum_Face(i):
     LIP_DEG.guide = LIP_DEG.guide / (i-1)
     FACE_DEG.guide = FACE_DEG.guide / (i-1)
     CHIN_DIS.guide = CHIN_DIS.guide / (i-1)
-    
+
     right_left = Eye_lip_incline(EYE_LIP_DEG.guide, EYE_DEG.guide, LIP_DEG.guide)
     face = Face_incline(FACE_DEG.guide) 
     chin = Chin_measurement(CHIN_DIS.guide)
@@ -218,8 +218,9 @@ def Face_incline(face_results):
     return face
 
 def Chin_measurement(chin_distance):
-    chin_distance = 87 / (1/60) * MIDDLE_LR_F.z  * chin_distance
-        
+
+    chin_distance = (870 / ((1/6) * MIDDLE_LR_F.z*1000))  * chin_distance
+    
     if chin_distance < 3:
         return 0 #근육형 or 대칭으로 분류
     else:
