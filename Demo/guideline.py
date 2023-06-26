@@ -12,20 +12,18 @@ from Library import *
 #어깨 깊이
 def Shoulder_Depth():
     #두 어깨의 깊이 차이가 0.1 이상일 때 => 카메라와 평행으로 서주세요
-    if(abs(L_SHOULDER.z - R_SHOULDER.z) > 0.1):
+    if(abs(L_SHOULDER.z - R_SHOULDER.z) > 0.07):
         STR.guide = '카메라와 평행으로 서주세요'
         
     #*아닐 떄 출력
-    else:
-        print("왼쪽 어깨 깊이 : ({}, {}) : {} 미터".format(L_SHOULDER.x, L_SHOULDER.y, L_SHOULDER.z))
-        print("오른쪽 어깨 깊이 : ({}, {}) : {} 미터".format(R_SHOULDER.x, R_SHOULDER.y, R_SHOULDER.z))
-    
+    #else:
+        
     #코의 좌표와 어깨 중앙의 좌표를 기준으로 
     Middle_dist = (L_SHOULDER.z + R_SHOULDER.z) / 2
-    if(abs(NOSE.z - Middle_dist) > 0.1):
+    if(abs(NOSE.z - Middle_dist) > 0.07):
         STR.guide = '허리를 펴주세요'
-    else:
-        print('코의 깊이 : ({}, {}) : {} 미터'.format(NOSE.x, NOSE.y, NOSE.z))
+    #else:
+       
 
 #어깨 가이드라인
 def INguideline(Depth,Landmarks):
@@ -134,7 +132,7 @@ def INFace(Depth,Landmarks):
         GLABELLA.y = (glabella_landmark.y * HEIGHT)
         
         if(280 < CHIN.x < 340 and  250 < CHIN.y < 310 and 300 < FORHEAD.x < 400 and 53 < FORHEAD.y < 133):
-            if(310 < GLABELLA.x < 325 and 139 < GLABELLA.y < 153):
+            if(300 < GLABELLA.x < 330 and 130 < GLABELLA.y < 160):
                 #측정 시작부분
                 return True
             else:            
