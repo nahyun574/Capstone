@@ -35,9 +35,12 @@ def INguideline(Depth,Landmarks):
         R_EAR.x, R_EAR.y = Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR].x * WIDTH, Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR].y * HEIGHT
         NOSE.x, NOSE.y = Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE].x * WIDTH, Landmarks.pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE].y * HEIGHT
         
-        L_SHOULDER.z = Depth.get_distance(int(L_SHOULDER.x), int(L_SHOULDER.y))
-        R_SHOULDER.z = Depth.get_distance(int(R_SHOULDER.x), int(R_SHOULDER.y))
-        NOSE.z = Depth.get_distance(int(NOSE.x), int(NOSE.y))
+        if 0 <= int(L_SHOULDER.x) < WIDTH and 0 <= int(L_SHOULDER.y) < HEIGHT:
+            if 0 <= int(R_SHOULDER.x) < WIDTH and 0 <= int(R_SHOULDER.y) < HEIGHT:
+                if 0 <= int(NOSE.x) < WIDTH and 0 <= int(NOSE.y) < HEIGHT:
+                    L_SHOULDER.z = Depth.get_distance(int(L_SHOULDER.x), int(L_SHOULDER.y))
+                    R_SHOULDER.z = Depth.get_distance(int(R_SHOULDER.x), int(R_SHOULDER.y))
+                    NOSE.z = Depth.get_distance(int(NOSE.x), int(NOSE.y))
 
         
         #가이드라인 안에 있는지 확인
