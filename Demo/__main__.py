@@ -63,7 +63,8 @@ class Face_result(tkinter.Frame):
         
         Face_Video_result()
         
-        label_text_F_TEXT = f"얼굴비대칭: {F_TEXT.guide}"  # 텍스트 문자열 생성
+        if(FC_LR_TEXT.guide != '대칭' or FC_CENTER_TEXT.guide != '대칭'):
+            label_text_F_TEXT = f"얼굴비대칭: {F_TEXT.guide}"  # 텍스트 문자열 생성
         label_text_FA_TEXT = f"눈과 입의 각도: {FA_TEXT.guide}"
         label_text_FC_LR_TEXT = f"좌우 안면비대칭: {FC_LR_TEXT.guide}"
         label_text_FC_CENTER_TEXT = f"중앙 안면비대칭: {FC_CENTER_TEXT.guide}"
