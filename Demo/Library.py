@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from multiprocessing import Process
 import threading
+import os
 
 # 생성한 라이브러리
 # from Library import *
@@ -21,8 +22,9 @@ import threading
 
 
 ################################ 전역 변수 설정 ################################
-GUIDELINE = cv2.imread('C:/lab/Demo/image/GuideLine.png')
-FACE_GUIDELINE = cv2.imread('C:/lab/Demo/image/face_guideline_head.png')
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+GUIDELINE = cv2.imread(ROOT_DIR + '/image/GuideLine.png')
+FACE_GUIDELINE = cv2.imread(ROOT_DIR + '/image/face_guideline_head.png')
 WIDTH = 640
 HEIGHT = 480
 COUNTOUT = 60
