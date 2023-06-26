@@ -73,7 +73,7 @@ def Media_Shoulder():
             L_SHOULDER.z = depth.get_distance(int(L_SHOULDER.x), int(L_SHOULDER.y))
             R_SHOULDER.z = depth.get_distance(int(R_SHOULDER.x), int(R_SHOULDER.y))
             MIDDLE_LR_S.z = (L_SHOULDER.z + R_SHOULDER.z) / 2
-            
+            print(MIDDLE_LR_S.z)
             # #가이드라인 확인 5초마다
             if time.time() - Start_Time > N_SECONDS:
                 count += 1
@@ -177,7 +177,7 @@ def Media_Face():
 
             CHIN.z = depth.get_distance(int(CHIN.x), int(CHIN.y))
             FORHEAD.z = depth.get_distance(int(FORHEAD.x), int(FORHEAD.y))
-            MIDDLE_LR_F.z = (CHIN.x + FORHEAD.z) / 2
+            MIDDLE_LR_F.z = (CHIN.z + FORHEAD.z) / 2
             
             # #가이드라인 확인 5초마다
             if time.time() - Start_Time > N_SECONDS:
@@ -215,7 +215,7 @@ def Media_Face():
 
 #어깨 영상 저장
 def save():
-    VIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
+    VIDEO_COLOR_WRITER = cv2.VideoWriter(ROOT_DIR + '/image/color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
     #VIDEO_DEPTH_WRITER = cv2.VideoWriter('C:/lab/Demo/image/depth_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (WIDTH, HEIGHT), isColor = True)
     #* 촬영 시작
     STR.guide = '촬영을 시작합니다 3'
@@ -277,7 +277,7 @@ def save():
 
 #얼굴 영상 저장
 def face_save():
-    FACEVIDEO_COLOR_WRITER = cv2.VideoWriter('C:/lab/Demo/image/face_color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 25, (WIDTH, HEIGHT), isColor = True)
+    FACEVIDEO_COLOR_WRITER = cv2.VideoWriter(ROOT_DIR + '/image/face_color_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 25, (WIDTH, HEIGHT), isColor = True)
     #* 촬영 시작
     STR.guide = '촬영을 시작합니다 3'
     
