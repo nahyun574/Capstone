@@ -70,10 +70,12 @@ def Media_Shoulder():
             frame = cv2.cvtColor(np.asanyarray(frame.get_data()), cv2.COLOR_BGR2RGB)
 
             MP_landmark = pose.process(frame)
-            L_SHOULDER.z = depth.get_distance(int(L_SHOULDER.x), int(L_SHOULDER.y))
-            R_SHOULDER.z = depth.get_distance(int(R_SHOULDER.x), int(R_SHOULDER.y))
-            MIDDLE_LR_S.z = (L_SHOULDER.z + R_SHOULDER.z) / 2
-            print(MIDDLE_LR_S.z)
+            if 0 <= int(L_SHOULDER.x) < WIDTH and 0 <= int(L_SHOULDER.y) < HEIGHT:
+                if 0 <= int(R_SHOULDER.x) < WIDTH and 0 <= int(R_SHOULDER.y) < HEIGHT:
+                    L_SHOULDER.z = depth.get_distance(int(L_SHOULDER.x), int(L_SHOULDER.y))
+                    R_SHOULDER.z = depth.get_distance(int(R_SHOULDER.x), int(R_SHOULDER.y))
+                    MIDDLE_LR_S.z = (L_SHOULDER.z + R_SHOULDER.z) / 2
+
             # #가이드라인 확인 5초마다
             if time.time() - Start_Time > N_SECONDS:
                 count += 1
@@ -175,9 +177,11 @@ def Media_Face():
             HO_landmark = holistic.process(frame) 
             FC_landmark = face_mesh.process(frame) 
 
-            CHIN.z = depth.get_distance(int(CHIN.x), int(CHIN.y))
-            FORHEAD.z = depth.get_distance(int(FORHEAD.x), int(FORHEAD.y))
-            MIDDLE_LR_F.z = (CHIN.z + FORHEAD.z) / 2
+            if 0 <= int(CHIN.x) < WIDTH and 0 <= int(CHIN.y) < HEIGHT:
+                if 0 <= int(FORHEAD.x) < WIDTH and 0 <= int(FORHEAD.y) < HEIGHT:
+                    CHIN.z = depth.get_distance(int(CHIN.x), int(CHIN.y))
+                    FORHEAD.z = depth.get_distance(int(FORHEAD.x), int(FORHEAD.y))
+                    MIDDLE_LR_F.z = (CHIN.z + FORHEAD.z) / 2
             
             # #가이드라인 확인 5초마다
             if time.time() - Start_Time > N_SECONDS:
