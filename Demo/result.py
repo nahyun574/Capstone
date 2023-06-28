@@ -5,22 +5,22 @@ from Library import *
 
 def Shoulder_incline(lx, ly, rx, ry):
     #깊이
-    y_dis = (870 / ((1/6) * MIDDLE_LR_S.z*1000))  * (ry-ly)
+    Y_DIS.x = (870 / ((1/6) * MIDDLE_LR_S.z*1000))  * (ry-ly)
     
     # 0 : 평행
     # -1 : 오류
     # 2 : 왼쪽이 높음
     # 3 : 오른쪽이 높음
-    if 0 <= (y_dis) <= 10: 
+    if 0 <= (Y_DIS.x) <= 10: 
         R_TEXT.guide = '균형'
     elif lx - rx == 0:
         R_TEXT.guide = '인식불가'
     else:
         if (ry-ly) / (rx-lx) > 0:
-            if abs(y_dis) > 20:
+            if abs(Y_DIS.x) > 20:
                 R_TEXT.guide = '왼쪽어깨'
                 R_TY_TEXT.guide = '고도 비대칭'
-            elif abs(y_dis) > 15:
+            elif abs(Y_DIS.x) > 15:
                 R_TEXT.guide = '왼쪽어깨'
                 R_TY_TEXT.guide = '중도 비대칭'
             else:
@@ -28,15 +28,28 @@ def Shoulder_incline(lx, ly, rx, ry):
                 R_TY_TEXT.guide = '경도 비대칭'
             
         else:
-            if abs(y_dis) > 20:
+            if abs(Y_DIS.x) > 20:
                 R_TEXT.guide = '오른쪽어깨'
                 R_TY_TEXT.guide = '고도 비대칭' 
-            elif abs(y_dis) > 15:
+            elif abs(Y_DIS.x) > 15:
                 R_TEXT.guide = '오른쪽어깨'
                 R_TY_TEXT.guide = '중도 비대칭' 
             else:
                 R_TEXT.guide = '오른쪽어깨'
-                R_TY_TEXT.guide = '경도 비대칭'  
+                R_TY_TEXT.guide = '경도 비대칭'
+
+#어깨 스코어링
+def Shoulder_score():
+    if abs(Y_DIS.x) < 1:
+        S_SCORE.guide = 100
+    elif abs(Y_DIS.x) < 2:
+        S_SCORE.guide = 99
+    elif abs(Y_DIS.x) <= 10:
+        S_SCORE.guide = (100 - int(abs(Y_DIS.x) * 1))
+    elif 10 < abs(Y_DIS.x) < 100:
+        S_SCORE.guide = (110 - int(abs(Y_DIS.x) * 2))
+    else:
+        S_SCORE.guide = "잘못 측정"
 
 #어깨 결과 측정
 def Shoulder(Landmarks):
@@ -92,7 +105,8 @@ def Video_result():
                         break
             except:
                 Sum_Sholder(i)
-
+                Shoulder_score()
+                
                 cv2.destroyAllWindows()
                 break
 
@@ -266,6 +280,30 @@ def FACE_TYPE(right_left, face, chin):#최종 타입 정리
                     FA_TEXT.guide = '눈과 입의 각도가 {}도 틀어짐'.format(round(EYE_LIP_DEG.guide,2))
                     FC_LR_TEXT.guide = '{}'.format(right_left)
                     FC_CENTER_TEXT.guide = '{}'.format(face)
+
+#중앙안면
+def F_CENTER_SCORE(face_results):
+    if face_results < 0.1:
+        F_SCORE_CENTER.guide = 100
+    elif face_results < 0.2:
+        F_SCORE_CENTER.guide = 99
+    elif face_results <= 1.0:
+        F_SCORE_CENTER.guide = (100 - int(face_results * 10))
+    elif 1.0 < face_results < 100:
+        F_SCORE_CENTER.guide = (int(90 - ((face_results-1) // 0.3)))
+    else:
+        F_SCORE_CENTER.guide = "잘못 측정"
+
+#좌우안면
+def F_LR_SCORE():
+    if (round(EYE_LIP_DEG.guide,2)) < 0.1:
+        F_SCORE_LR.guide = 100
+    elif (round(EYE_LIP_DEG.guide,2)) < 0.2:
+        F_SCORE_LR.guide = 99
+    elif (round(EYE_LIP_DEG.guide,2)) < 100:
+        F_SCORE_LR.guide = (100 - int((round(EYE_LIP_DEG.guide,2)) * 10))
+    else:
+        F_SCORE_LR.guide = "잘못 측정"
  
 #얼굴 안내선
 def Face_line(Landmarks, frame):
@@ -377,7 +415,9 @@ def Face_Video_result():
                         break
             except:
                 Sum_Face(i)
-
+                F_CENTER_SCORE(FACE_DEG.guide)
+                F_LR_SCORE()
+                
                 cv2.destroyAllWindows()
                 break
 
