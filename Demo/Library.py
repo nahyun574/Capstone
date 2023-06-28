@@ -68,6 +68,7 @@ R_SHOULDER = Pos()
 L_EAR = Pos()
 R_EAR = Pos()
 NOSE = Pos()
+Y_DIS = Pos()
 
 CHIN = Pos()
 FORHEAD = Pos()
@@ -103,6 +104,10 @@ FC_CENTER_TEXT = Str()
 DISTANCE = Int()
 MIDDLE_LR_S = Pos()
 MIDDLE_LR_F = Pos()
+
+S_SCORE = Str()
+F_SCORE_CENTER = Str()
+F_SCORE_LR = Str()
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
