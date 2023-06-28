@@ -68,14 +68,20 @@ class Face_result(tkinter.Frame):
         label_text_FA_TEXT = f"눈과 입의 각도: {FA_TEXT.guide}"
         label_text_FC_LR_TEXT = f"좌우 안면비대칭: {FC_LR_TEXT.guide}"
         label_text_FC_CENTER_TEXT = f"중앙 안면비대칭: {FC_CENTER_TEXT.guide}"
+        label_text_F_SCORE_LR = f"좌우 안면 점수: {F_SCORE_LR.guide}"
+        label_text_F_SCORE_CENTER = f"중앙 안면 점수: {F_SCORE_CENTER.guide}"
         label = tkinter.Label(self, text=label_text_F_TEXT)  # 라벨 생성 및 텍스트 설정
         label.pack()
         label_ty = tkinter.Label(self, text=label_text_FA_TEXT)
         label_ty.pack()
-        label_ty = tkinter.Label(self, text=label_text_FC_LR_TEXT)
-        label_ty.pack()
-        label_ty = tkinter.Label(self, text=label_text_FC_CENTER_TEXT)
-        label_ty.pack()
+        label_FC_LR = tkinter.Label(self, text=label_text_FC_LR_TEXT)
+        label_FC_LR.pack()
+        label_FC_CENTER = tkinter.Label(self, text=label_text_FC_CENTER_TEXT)
+        label_FC_CENTER.pack()
+        label_F_LR = tkinter.Label(self, text=label_text_F_SCORE_LR)
+        label_F_LR.pack()
+        label_F_C = tkinter.Label(self, text=label_text_F_SCORE_CENTER)
+        label_F_C.pack()
         
         button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: (master.switch_frame(Main_Page))).pack(side="bottom")
         
@@ -103,10 +109,13 @@ class Shoulder_result(tkinter.Frame):
         
         label_text_R_TEXT = f"어깨비대칭: {R_TEXT.guide}"  # 텍스트 문자열 생성
         label_text_R_TY = f"어깨척도: {R_TY_TEXT.guide}"
+        label_text_R_SCORE = f"어깨점수: {S_SCORE.guide}"
         label = tkinter.Label(self, text=label_text_R_TEXT)  # 라벨 생성 및 텍스트 설정
         label.pack()
         label_ty = tkinter.Label(self, text=label_text_R_TY)
         label_ty.pack()
+        label_score = tkinter.Label(self, text=label_text_R_SCORE)
+        label_score.pack()
         
         button_main = tkinter.Button(self, text="메인 화면으로",command=lambda: (master.switch_frame(Main_Page))).pack(side="bottom")
 
