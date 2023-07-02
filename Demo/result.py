@@ -41,13 +41,13 @@ def Shoulder_incline(lx, ly, rx, ry):
 #어깨 스코어링
 def Shoulder_score():
     if abs(Y_DIS.x) < 1:
-        S_SCORE.guide = 100
+        S_SCORE.guide, S_SCORE_I.guide = 100, 100
     elif abs(Y_DIS.x) < 2:
-        S_SCORE.guide = 99
+        S_SCORE.guide, S_SCORE_I.guide = 99, 99
     elif abs(Y_DIS.x) <= 10:
-        S_SCORE.guide = (100 - int(abs(Y_DIS.x) * 1))
+        S_SCORE.guide, S_SCORE_I.guide = (100 - int(abs(Y_DIS.x) * 1)), (100 - int(abs(Y_DIS.x) * 1))
     elif 10 < abs(Y_DIS.x) < 100:
-        S_SCORE.guide = (110 - int(abs(Y_DIS.x) * 2))
+        S_SCORE.guide, S_SCORE_I.guide = (110 - int(abs(Y_DIS.x) * 2)), (110 - int(abs(Y_DIS.x) * 2))
     else:
         S_SCORE.guide = "잘못 측정"
 
@@ -284,24 +284,24 @@ def FACE_TYPE(right_left, face, chin):#최종 타입 정리
 #중앙안면
 def F_CENTER_SCORE(face_results):
     if face_results < 0.1:
-        F_SCORE_CENTER.guide = 100
+        F_SCORE_CENTER.guide, F_SCORE_CENTER_I.guide = 100, 100
     elif face_results < 0.2:
-        F_SCORE_CENTER.guide = 99
+        F_SCORE_CENTER.guide, F_SCORE_CENTER_I.guide = 99, 99
     elif face_results <= 1.0:
-        F_SCORE_CENTER.guide = (100 - int(face_results * 10))
+        F_SCORE_CENTER.guide, F_SCORE_CENTER_I.guide = (100 - int(face_results * 10)), (100 - int(face_results * 10))
     elif 1.0 < face_results < 100:
-        F_SCORE_CENTER.guide = (int(90 - ((face_results-1) // 0.3)))
+        F_SCORE_CENTER.guide, F_SCORE_CENTER_I.guide = (int(90 - ((face_results-1) // 0.3))), (int(90 - ((face_results-1) // 0.3)))
     else:
         F_SCORE_CENTER.guide = "잘못 측정"
 
 #좌우안면
 def F_LR_SCORE():
     if (round(EYE_LIP_DEG.guide,2)) < 0.1:
-        F_SCORE_LR.guide = 100
+        F_SCORE_LR.guide, F_SCORE_LR_I.guide = 100, 100
     elif (round(EYE_LIP_DEG.guide,2)) < 0.2:
-        F_SCORE_LR.guide = 99
+        F_SCORE_LR.guide, F_SCORE_LR_I.guide = 99, 99
     elif (round(EYE_LIP_DEG.guide,2)) < 100:
-        F_SCORE_LR.guide = (100 - int((round(EYE_LIP_DEG.guide,2)) * 10))
+        F_SCORE_LR.guide, F_SCORE_LR_I.guide = (100 - int((round(EYE_LIP_DEG.guide,2)) * 10)), (100 - int((round(EYE_LIP_DEG.guide,2)) * 10))
     else:
         F_SCORE_LR.guide = "잘못 측정"
  
@@ -417,7 +417,7 @@ def Face_Video_result():
                 Sum_Face(i)
                 F_CENTER_SCORE(FACE_DEG.guide)
                 F_LR_SCORE()
-                
+
                 cv2.destroyAllWindows()
                 break
 
