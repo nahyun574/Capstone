@@ -14,6 +14,7 @@ from pathlib import Path
 from multiprocessing import Process
 import threading
 import os
+import tkinter as tk
 
 # 생성한 라이브러리
 # from Library import *
@@ -108,6 +109,14 @@ MIDDLE_LR_F = Pos()
 S_SCORE = Str()
 F_SCORE_CENTER = Str()
 F_SCORE_LR = Str()
+
+S_SCORE_I = Int()
+F_SCORE_CENTER_I = Int()
+F_SCORE_LR_I = Int()
+
+DATA = [('Face_lr', F_SCORE_LR_I.guide),('Face_center', F_SCORE_CENTER_I.guide), ('Shoulder', S_SCORE_I.guide), ('test1', 67), ('test2', 22)]
+
+
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
