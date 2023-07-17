@@ -1,3 +1,3 @@
-# Capstone 스켈레톤 카메라 활용
+# Capstone 신체불균형 측정
 
 
