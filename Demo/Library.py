@@ -26,8 +26,8 @@ import tkinter as tk
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 GUIDELINE = cv2.imread(ROOT_DIR + '/image/GuideLine.png')
 FACE_GUIDELINE = cv2.imread(ROOT_DIR + '/image/face_guideline_head.png')
-WIDTH = 640
-HEIGHT = 480
+WIDTH = 272
+HEIGHT = 460
 COUNTOUT = 60
 N_SECONDS = 2
 PI = math.pi
@@ -49,7 +49,7 @@ BLUE = (0,0,255)
 BLACK = (0,0,0)
 
 #폰트 로드
-FONTPATH = 'F:/backup/Project/CapStone/code/Demo/NanumGothicBold.ttf'
+FONTPATH = ROOT_DIR + '/NanumGothicBold.ttf'
 FONT = ImageFont.truetype(FONTPATH,20)
 
 @dataclass
@@ -105,6 +105,8 @@ FC_CENTER_TEXT = Str()
 DISTANCE = Int()
 MIDDLE_LR_S = Pos()
 MIDDLE_LR_F = Pos()
+MIDDLE_PEL = Pos()
+MIDDLE_KNEE = Pos()
 
 S_SCORE = Str()
 F_SCORE_CENTER = Str()
@@ -113,6 +115,19 @@ F_SCORE_LR = Str()
 S_SCORE_I = Int()
 F_SCORE_CENTER_I = Int()
 F_SCORE_LR_I = Int()
+
+L_PEL = Pos()
+R_PEL = Pos()
+L_KNEE = Pos()
+R_KNEE = Pos()
+L_FOOT = Pos()
+R_FOOT = Pos()
+PEL_DIS = Pos()
+P_SCORE = Str()
+P_SCORE_I = Str()
+
+SUM_LPEL = Pos()
+SUM_RPEL = Pos()
 
 DATA = [('Face_lr', F_SCORE_LR_I.guide),('Face_center', F_SCORE_CENTER_I.guide), ('Shoulder', S_SCORE_I.guide), ('test1', 67), ('test2', 22)]
 
